@@ -51,6 +51,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -78,11 +79,9 @@ internal fun Lesson1Screen() {
     Text(text = "Current time: $currentTime")
 
     Button(onClick = {
-      Thread {
-        doBlockingWork()
-      }.start()
+      AsyncTaskExample().execute()
     }) {
-      Text(text = "Do blocking work on background thread")
+      Text(text = "Start AsyncTask")
     }
 
     Button(onClick = {
@@ -92,9 +91,11 @@ internal fun Lesson1Screen() {
     }
 
     Button(onClick = {
-      AsyncTaskExample().execute()
+      thread {
+        doBlockingWork()
+      }
     }) {
-      Text(text = "Start AsyncTask")
+      Text(text = "Do blocking work on background thread")
     }
   }
 }

@@ -78,9 +78,9 @@ internal fun Lesson1Screen() {
     Text(text = "Current time: $currentTime")
 
     Button(onClick = {
-      // TODO: call doBlockingWork() on a background thread
+      AsyncTaskExample().execute()
     }) {
-      Text(text = "Do blocking work on background thread")
+      Text(text = "Start AsyncTask")
     }
 
     Button(onClick = {
@@ -90,9 +90,9 @@ internal fun Lesson1Screen() {
     }
 
     Button(onClick = {
-      // TODO: call doBlockingWork() in an AsyncTask
+      // TODO: call doBlockingWork() on a background thread
     }) {
-      Text(text = "Start AsyncTask")
+      Text(text = "Do blocking work on background thread")
     }
   }
 }
