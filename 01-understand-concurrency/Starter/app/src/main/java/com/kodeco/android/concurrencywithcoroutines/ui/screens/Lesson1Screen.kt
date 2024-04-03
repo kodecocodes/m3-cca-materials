@@ -47,7 +47,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
@@ -62,12 +61,13 @@ internal fun Lesson1Screen() {
     }
     DisposableEffect(key1 = Unit) {
       val subscription = Observable.interval(100, TimeUnit.MILLISECONDS)
-        .map { tick ->
+        .doOnNext { tick ->
           Log.i("Lesson1", "Time tick #$tick")
+        }
+        .map {
           DateTimeFormatter.ofPattern("HH:mm:ss:SSS").format(LocalDateTime.now())
         }
-        .observeOn(Schedulers.io())
-        .subscribeOn(AndroidSchedulers.mainThread())
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe { formattedTime ->
           currentTime = formattedTime
         }
@@ -104,6 +104,7 @@ private fun doBlockingWork() {
 }
 
 private class AsyncTaskExample : AsyncTask<Unit, Unit, Unit>() {
+
   override fun onPreExecute() {
     Log.i("Lesson1Screen", "AsyncTask onPreExecute in ${Thread.currentThread().name}")
   }
