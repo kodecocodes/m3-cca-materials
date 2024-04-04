@@ -90,7 +90,7 @@ internal fun Lesson1Screen() {
     }
 
     Button(onClick = {
-      // TODO: call doBlockingWork() in an AsyncTask
+      // TODO: call execute() in an AsyncTask
     }) {
       Text(text = "Start AsyncTask")
     }
