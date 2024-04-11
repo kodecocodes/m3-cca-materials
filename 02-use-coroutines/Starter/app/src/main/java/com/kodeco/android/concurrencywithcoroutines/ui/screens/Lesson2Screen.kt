@@ -45,6 +45,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -54,6 +55,9 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 internal fun Lesson2Screen() {
   val coroutineScope = rememberCoroutineScope()
+  var job: Job? by remember {
+    mutableStateOf(null)
+  }
   Column {
     var currentTime by remember {
       mutableStateOf("")
@@ -73,12 +77,22 @@ internal fun Lesson2Screen() {
     }) {
       Text(text = "Do suspendable work on main thread")
     }
+    Button(onClick = {
+      job?.cancel()
+    }) {
+      Text(text = "Cancel coroutine job")
+    }
   }
 }
 
 
 private suspend fun doSuspendableWork() {
   Log.i("Lesson2", "Heavy suspendable work in ${Thread.currentThread().name} started")
-  delay(3.seconds.inWholeMilliseconds)
+  try {
+    delay(3.seconds)
+  } catch (e: Exception) {
+    Log.w("Lesson2", "Caught exception", e)
+    throw e
+  }
   Log.i("Lesson2", "Heavy suspendable work in ${Thread.currentThread().name} finished")
 }

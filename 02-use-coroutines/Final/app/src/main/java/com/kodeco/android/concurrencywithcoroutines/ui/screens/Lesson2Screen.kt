@@ -40,12 +40,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -56,6 +56,9 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 internal fun Lesson2Screen() {
   val coroutineScope = rememberCoroutineScope()
+  var job: Job? by remember {
+    mutableStateOf(null)
+  }
   Column {
     var currentTime by remember {
       mutableStateOf("")
@@ -71,11 +74,16 @@ internal fun Lesson2Screen() {
     Text(text = "Current time: $currentTime")
 
     Button(onClick = {
-      coroutineScope.launch {
+      job = coroutineScope.launch {
         doSuspendableWork()
       }
     }) {
       Text(text = "Do suspendable work on main thread")
+    }
+    Button(onClick = {
+      job?.cancel()
+    }) {
+      Text(text = "Cancel coroutine job")
     }
   }
 }
@@ -83,6 +91,11 @@ internal fun Lesson2Screen() {
 
 private suspend fun doSuspendableWork() {
   Log.i("Lesson2", "Heavy suspendable work in ${Thread.currentThread().name} started")
-  delay(3.seconds.inWholeMilliseconds)
+  try {
+    delay(3.seconds)
+  } catch (e: Exception) {
+    Log.w("Lesson2", "Caught exception", e)
+    throw e
+  }
   Log.i("Lesson2", "Heavy suspendable work in ${Thread.currentThread().name} finished")
 }
