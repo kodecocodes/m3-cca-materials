@@ -55,7 +55,7 @@ internal fun Lesson3ScopesScreen(
 
   Column {
     Button(onClick = {
-      coroutineScope.launch {
+      MainScope().launch {
         Log.i("Lesson3", "starting 2 seconds delay")
         delay(2.seconds)
         Log.i("Lesson3", "navigating back")
