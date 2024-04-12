@@ -47,7 +47,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kodeco.android.concurrencywithcoroutines.ui.screens.Lesson3DispatchersScreen
-import com.kodeco.android.concurrencywithcoroutines.ui.screens.Lesson3ScopesJobsScreen
+import com.kodeco.android.concurrencywithcoroutines.ui.screens.Lesson3ScopesScreen
 import com.kodeco.android.concurrencywithcoroutines.ui.screens.MenuScreen
 import com.kodeco.android.concurrencywithcoroutines.ui.theme.KotlinCoroutinesFundamentalsTheme
 import kotlinx.coroutines.DEBUG_PROPERTY_NAME
@@ -76,12 +76,12 @@ class MainActivity : ComponentActivity() {
               MenuScreen(
                 items = listOf(
                   "Dispatchers" to { navController.navigate("dispatchers") },
-                  "Scopes & Jobs" to { navController.navigate("scopesJobs") },
+                  "Scopes" to { navController.navigate("scopes") },
                 )
               )
             }
             composable("dispatchers") { Lesson3DispatchersScreen(navController::navigateUp) }
-            composable("scopesJobs") { Lesson3ScopesJobsScreen(navController::navigateUp) }
+            composable("scopes") { Lesson3ScopesScreen(navController::navigateUp) }
           }
         }
       }

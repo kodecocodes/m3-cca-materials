@@ -39,43 +39,49 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
-internal fun Lesson3ScopesJobsScreen(
+internal fun Lesson3ScopesScreen(
   onNavigateBack: () -> Unit,
 ) {
 
   val coroutineScope = rememberCoroutineScope()
-  val parentJob by remember { mutableStateOf(Job()) }
 
   Column {
     Button(onClick = {
-      // TODO: Launch a coroutine navigating back in the composable scope
+      coroutineScope.launch {
+        Log.i("Lesson3", "starting 2 seconds delay")
+        delay(2.seconds)
+        Log.i("Lesson3", "navigating back")
+        onNavigateBack()
+      }
     }) {
       Text(text = "Navigate back in composable scope")
     }
 
     Button(onClick = {
-      Log.d("Lesson3", "Coroutine about to start. Job: ${parentJob.dumpState()}")
-      // TODO: Launch a coroutine in the parent job
+      Log.d("Lesson3", "Coroutine about to start.")
+      coroutineScope.launch {
+        Log.d("Lesson3", "Coroutine started.")
+        delay(2.seconds)
+        Log.d("Lesson3", "Coroutine finished.")
+      }
     }) {
       Text(text = "Launch coroutine")
     }
 
     Button(onClick = {
-      Log.d("Lesson3", "Job about to cancel. Job: ${parentJob.dumpState()}")
-      // TODO: Cancel the parent job
-      Log.d("Lesson3", "Job cancellation requested. Job: ${parentJob.dumpState()}")
+      Log.d("Lesson3", "Scope about to cancel.")
+      coroutineScope.cancel()
+      Log.d("Lesson3", "Scope cancellation requested.")
     }) {
-      Text(text = "Cancel coroutine")
+      Text(text = "Cancel scope")
     }
 
     Button(onClick = onNavigateBack) {
@@ -83,5 +89,3 @@ internal fun Lesson3ScopesJobsScreen(
     }
   }
 }
-
-private fun Job.dumpState() = "active: $isActive, cancelled: $isCancelled, completed: $isCompleted"
