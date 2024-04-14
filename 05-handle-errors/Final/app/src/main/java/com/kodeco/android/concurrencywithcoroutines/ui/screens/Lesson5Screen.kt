@@ -44,7 +44,7 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
@@ -85,14 +85,12 @@ internal fun Lesson5Screen() {
     }
 
     Button(onClick = {
-      coroutineScope.launch {
-        async {
-          Log.d(
-            "Lesson5",
-            "Coroutine inside async on thread: ${Thread.currentThread().name}",
-          )
-          throw Exception("async went wrong")
-        }
+      coroutineScope.async {
+        Log.d(
+          "Lesson5",
+          "Coroutine inside async on thread: ${Thread.currentThread().name}",
+        )
+        throw Exception("async went wrong")
       }
     }) {
       Text("Throw exception from async")
@@ -100,8 +98,17 @@ internal fun Lesson5Screen() {
 
     Button(onClick = {
       coroutineScope.launch {
-        launch { throw IOException("I/O error") }
-        launch { throw IllegalArgumentException("Illegal argument error") }
+        launch {
+          try {
+            delay(Long.MAX_VALUE)
+          } finally {
+            throw IllegalArgumentException("Illegal argument exception")
+          }
+        }
+        launch {
+          delay(100)
+          throw IOException("I/O exception")
+        }
       }
     }) {
       Text("Throw aggregated exceptions")
