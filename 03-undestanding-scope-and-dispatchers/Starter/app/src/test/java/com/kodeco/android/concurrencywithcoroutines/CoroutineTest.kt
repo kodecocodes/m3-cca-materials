@@ -45,17 +45,16 @@ class CoroutineTest {
 
   @Test
   fun `does heavy work`() = runBlocking {
-    println(doHeavyWork())
+    println("runBlocking took: ${doHeavyWork()}")
   }
 
   @Test
   fun `does heavy work in test environment`() = runTest {
-    println(doHeavyWork())
-    println(testScheduler.currentTime)
+    println("runTest took: ${doHeavyWork()}")
+    println("runTest current time: ${testScheduler.currentTime}ms")
   }
 }
 
 suspend fun doHeavyWork() = measureTime {
   delay(5.seconds)
 }
-

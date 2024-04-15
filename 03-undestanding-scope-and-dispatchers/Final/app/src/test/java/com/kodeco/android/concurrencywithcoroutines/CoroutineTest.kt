@@ -45,15 +45,13 @@ class CoroutineTest {
 
   @Test
   fun `does heavy work`() = runBlocking {
-    // TODO: Update Starter project
-    println("runBlocking: ${doHeavyWork()}")
+    println("runBlocking took: ${doHeavyWork()}")
   }
 
   @Test
   fun `does heavy work in test environment`() = runTest {
-    // TODO: Update Starter project
-    println("runTest: ${doHeavyWork()}")
-    println("runTest current time: ${testScheduler.currentTime}")
+    println("runTest took: ${doHeavyWork()}")
+    println("runTest current time: ${testScheduler.currentTime}ms")
   }
 }
 
