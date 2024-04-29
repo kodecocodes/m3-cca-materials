@@ -57,7 +57,7 @@ internal fun Lesson3ScopesScreen(
 
     Button(onClick = {
       Log.d("Lesson3", "Coroutine about to start.")
-      // TODO: Launch a coroutine in the parent job
+      // TODO: Launch a coroutine
     }) {
       Text(text = "Launch coroutine")
     }
